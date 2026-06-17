@@ -5,28 +5,27 @@ const { PORT, NODE_ENV } = require('./config/constants');
 
 const start = async () => {
   try {
-    // Verify DB connection
     await prisma.$connect();
     console.log('✅ Database connected successfully.');
 
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log('');
-      console.log('  🔧 Fixly Backend Server');
-      console.log('  ─────────────────────────────');
-      console.log(`  🚀 Running on  : http://localhost:${PORT}`);
-      console.log(`  🌍 Environment : ${NODE_ENV}`);
-      console.log(`  📡 API Base    : http://localhost:${PORT}/api`);
-      console.log(`  💊 Health      : http://localhost:${PORT}/api/health`);
-      console.log('  ─────────────────────────────');
+      console.log('🔧 Fixly Backend Server');
+      console.log('─────────────────────────────');
+      console.log(`🚀 Running on Port : ${PORT}`);
+      console.log(`🌍 Environment     : ${NODE_ENV}`);
+      console.log(`📡 API Base        : /api`);
+      console.log(`💊 Health Check    : /api/health`);
+      console.log('─────────────────────────────');
       console.log('');
     });
 
-    // Graceful shutdown
     const shutdown = async (signal) => {
       console.log(`\n[${signal}] Shutting down gracefully...`);
+
       server.close(async () => {
         await prisma.$disconnect();
-        console.log('👋 Server closed. Database disconnected.');
+        console.log('👋 Database disconnected.');
         process.exit(0);
       });
     };
